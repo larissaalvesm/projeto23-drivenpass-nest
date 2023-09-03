@@ -57,5 +57,11 @@ export class UsersService {
 
         return data;
     }
+       
+    async erase(password: string, user: { id: number; email: string; password: string; }) {
+        const valid = await bcrypt.compare(password, user.password);
+        if (!valid) throw new UnauthorizedException("Password not valid.");
 
+        await this.usersRepository.eraseUser(user.id);
+    }
 }
